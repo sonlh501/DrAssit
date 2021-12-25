@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.home.HomeFragment">
+
+    <ImageButton
+        android:id="@+id/btnFillGas"
+        android:layout_width="91dp"
+        android:layout_height="91dp"
+        android:layout_marginHorizontal="32dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/gas"
+        app:layout_constraintRight_toLeftOf="@id/btnRepair"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline3"
+        android:background="@drawable/rounded_button"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        />
+
+    <ImageButton
+        android:id="@+id/btnRepair"
+        android:layout_width="91dp"
+        android:layout_height="91dp"
+        android:scaleType="fitCenter"
+        android:layout_marginHorizontal="10dp"
+        android:src="@drawable/repair"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/btnFillGas"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline3"
+        android:background="@drawable/rounded_button"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        />
+
+    <ImageButton
+        android:id="@+id/btnSos"
+        android:layout_width="91dp"
+        android:layout_height="91dp"
+        android:layout_marginHorizontal="32dp"
+        android:background="@drawable/rounded_button"
+        android:scaleType="fitCenter"
+        android:src="@drawable/sos"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/btnRepair"
+        app:layout_constraintTop_toTopOf="@+id/guideline3"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="122dp"
+        />
+
+    <TextView
+        android:id="@+id/tvGas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Fill Gas"
+        app:layout_constraintEnd_toEndOf="@+id/btnFillGas"
+        app:layout_constraintStart_toStartOf="@+id/btnFillGas"
+        app:layout_constraintTop_toBottomOf="@+id/btnFillGas" />
+
+    <TextView
+        android:id="@+id/tvRepair"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Repair"
+        app:layout_constraintEnd_toEndOf="@+id/btnRepair"
+        app:layout_constraintStart_toStartOf="@+id/btnRepair"
+        app:layout_constraintTop_toBottomOf="@+id/btnRepair" />
+
+    <TextView
+        android:id="@+id/tvSos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SOS"
+        app:layout_constraintEnd_toEndOf="@+id/btnSos"
+        app:layout_constraintStart_toStartOf="@+id/btnSos"
+        app:layout_constraintTop_toBottomOf="@+id/btnSos" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,82 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.DrAssit" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+
+
+    </style>
+    <style name="WarnButton" parent="Widget.MaterialComponents.Button">
+        <item name="colorButtonNormal">@color/teal_200</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="CustomWingOuter">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_marginLeft">16dp</item>
+        <item name="android:layout_marginRight">16dp</item>
+    </style>
+    <style name="CustomWingInner">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:background">#FFFFFF</item>
+    </style>
+
+
+
+
+    <style name="FirebaseUI" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <item name="android:buttonStyle">@style/FirebaseUI.Button</item>
+        <item name="android:textColorLink">?attr/colorPrimary</item>
+    </style>
+    <style name="FirebaseUI.Button" parent="@style/Widget.MaterialComponents.Button">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">end</item>
+    </style>
+    <style name="FirebaseUI.Button.AccountChooser">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:drawablePadding">@dimen/fui_auth_method_button_drawablePadding</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:paddingRight">12dp</item>
+        <item name="android:layout_marginTop">@dimen/fui_auth_method_button_margin</item>
+        <item name="android:layout_marginBottom">@dimen/fui_auth_method_button_margin</item>
+        <item name="android:gravity">left|center_vertical</item>
+        <item name="android:typeface">normal</item>
+    </style>
+    <style name="FirebaseUI.Button.AccountChooser.BaseButton">
+        <item name="iconGravity">start</item>
+        <item name="iconTint">@null</item>
+        <item name="android:insetBottom">@dimen/fui_button_inset_bottom</item>
+        <item name="android:insetTop">@dimen/fui_button_inset_top</item>
+        <item name="android:insetLeft">@dimen/fui_button_inset_left</item>
+        <item name="android:insetRight">@dimen/fui_button_inset_right</item>
+    </style>
+
+    <style name="FirebaseUI.Button.AccountChooser.GoogleButton" parent="FirebaseUI.Button.AccountChooser.BaseButton">
+        <item name="icon">@drawable/fui_ic_googleg_color_24dp</item>
+        <item name="backgroundTint">@color/fui_bgGoogle</item>
+        <item name="android:textColor">#757575</item>
+    </style>
+
+    <style name="FirebaseUI.Button.AccountChooser.FacebookButton" parent="FirebaseUI.Button.AccountChooser.BaseButton">
+        <item name="icon">@drawable/fui_ic_facebook_white_22dp</item>
+        <item name="backgroundTint">@color/fui_bgFacebook</item>
+        <item name="android:textColor">#FFFFFFFF</item>
+    </style>
+
+</resources>

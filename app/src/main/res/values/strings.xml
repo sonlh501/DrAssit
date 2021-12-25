@@ -1,0 +1,38 @@
+<resources>
+    <string name="app_name">DrAssit</string>
+
+    <!-- Auth UI - Signed in -->
+    <string name="signed_in_header">You are signed in!</string>
+    <string name="sign_out">Sign out</string>
+    <string name="delete_account_label">Delete account</string>
+
+    <string name="sign_in_failed">Sign in failed</string>
+    <string name="sign_out_failed">Sign out failed</string>
+    <string name="delete_account_failed">Delete account failed</string>
+
+    <string name="user_profile_header">User profile:</string>
+    <string name="profile_picture_content_desc">Profile picture</string>
+    <string name="used_providers">Providers used: %s</string>
+    <string name="idp_token">IDP Token</string>
+    <string name="idp_secret">IDP Secret</string>
+
+    <!-- Auth UI - Custom AuthMethodPickerLayout -->
+    <string name="custom_layout_subheader">Sign in using this nice custom layout!</string>
+    <string name="custom_layout_idp_header">Choose a provider</string>
+    <string name="custom_layout_email_header">Use your email</string>
+    <string name="custom_layout_email_click_text">Continue with Email</string>
+    <string name="fui_sign_in_with_google" translation_description="Sign in button text"> Sign in with Google </string>
+    <string name="fui_sign_in_with_facebook" translation_description="Sign in button text">Sign in with Facebook</string>
+
+
+    <!-- Facebook application ID and custom URL scheme (app ID prefixed by 'fb'). -->
+    <string name="facebook_app_id">336068031379375</string>
+    <string name="fb_login_protocol_scheme">fb336068031379375</string>
+
+    <string name="title_activity_driver_assitant">DriverAssitant</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+
+
+</resources>

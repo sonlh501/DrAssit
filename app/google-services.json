@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "15739369722",
+    "firebase_url": "https://drassit-95b6f-default-rtdb.firebaseio.com",
+    "project_id": "drassit-95b6f",
+    "storage_bucket": "drassit-95b6f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:15739369722:android:e2e71653a0f033ebeaf143",
+        "android_client_info": {
+          "package_name": "com.example.drassit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "15739369722-5dde74lj6sskagrnhic1vfp7q3nfohhq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.drassit",
+            "certificate_hash": "355b6195e9aefd549523d082c5299bee0abbdb48"
+          }
+        },
+        {
+          "client_id": "15739369722-c38lodi517q3ubcns5m0rt7jg93bk2kr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAscllFov9Uj5DXKtvUUIZg_1Le1hKN1Uo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "15739369722-c38lodi517q3ubcns5m0rt7jg93bk2kr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
