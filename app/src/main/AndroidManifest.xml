@@ -13,6 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DrAssit">
         <activity
+            android:name=".ui.notifications.NofiticationsFragment_EditProfile"
+            android:exported="true" />
+        <activity
             android:name=".ui.gas.FillGas"
             android:exported="true" />
         <activity
@@ -21,16 +24,16 @@
         <activity
             android:name=".DriverAssitant"
             android:exported="true"
-            android:label="@string/title_activity_driver_assitant" />
-        <activity
-            android:name=".MainActivity"
-            android:exported="true">
+            android:label="@string/title_activity_driver_assitant">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"></activity>
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"

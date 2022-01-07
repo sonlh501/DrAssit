@@ -43,10 +43,14 @@ import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -61,6 +65,10 @@ public class MainActivity extends AppCompatActivity {
     private CallbackManager mCallbackManager;
     private FirebaseAuth.AuthStateListener authStateListener;
     private AccessTokenTracker accessTokenTracker;
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();
+
+    List<Account> lstAccount;
+    DatabaseReference _myAccountRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -222,7 +230,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInFacebookWithCredential:success");
+                            Log.d(TAG, "signInFacebookWithCredential: Success");
                             FirebaseUser user = mAuth.getCurrentUser();
 
                             createIdToken(user);
@@ -268,17 +276,57 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSuccess(GetTokenResult result) {
                 String idToken = result.getToken();
-                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference myRef = database.getReference("Account");
 
-//                String id = myRef.getKey();
-//                myRef.child(id).setValue(idToken);
+                DatabaseReference userRef = database.getReference("Account");
+
+//                getData();
+
+                for( Account acc: lstAccount){
+                    if(acc.getTokenID().equals(idToken)){
+                        updateUI(user);
+                        return;
+                    }
+                }
+//                list id = getdata();
+//                for(id in list):
+//                if id==idToken;
+//                    updateUI();
+//                    return;
+                //String id = myRef.getKey();
+
+                DatabaseReference accountRef = userRef.push();
+                accountRef.setValue(idToken);
 
 
                 //myRef.setValue(idToken);
                 //Do whatever
                 Log.d(TAG, "GetTokenResult result = " + idToken);
             }
+        });
+    }
+
+    public void getData() {
+        lstAccount = new ArrayList<>();
+        _myAccountRef = database.getReference("Account");
+
+        _myAccountRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot data: snapshot.getChildren()){
+
+                    Account acc= data.getValue(Account.class);
+                    lstAccount.add(acc);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+
+
+
+
         });
     }
 }
