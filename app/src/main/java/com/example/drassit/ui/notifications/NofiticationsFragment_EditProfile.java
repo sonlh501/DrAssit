@@ -1,16 +1,23 @@
 package com.example.drassit.ui.notifications;
 
+import static android.content.ContentValues.TAG;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.drassit.R;
 import com.example.drassit.ui.model.Account;
+import com.google.android.gms.auth.api.credentials.IdToken;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class NofiticationsFragment_EditProfile extends AppCompatActivity {
 
@@ -46,17 +53,17 @@ public class NofiticationsFragment_EditProfile extends AppCompatActivity {
     }
 
 
-    public void getData() {
-
-        Bundle bundle = getIntent().getExtras();
-        if (acc == null) {
-            acc = new Account();
-        }
-        acc = (Account) bundle.get("Account");
-        et_Phone.setText(acc.getPhone());
-        et_Address.setText(acc.getAddress());
-        et_Card.setText(acc.getCard());
-    }
+//    public void getData() {
+//
+//        Bundle bundle = getIntent().getExtras();
+//        if (acc == null) {
+//            acc = new Account();
+//        }
+//        acc = (Account) bundle.get("Account");
+//        et_Phone.setText(acc.getPhone());
+//        et_Address.setText(acc.getAddress());
+//        et_Card.setText(acc.getCard());
+//    }
 
 
     public void setData(Account acc) {
@@ -65,8 +72,37 @@ public class NofiticationsFragment_EditProfile extends AppCompatActivity {
             acc.setPhone(et_Phone.getText().toString());
             acc.setAddress(et_Address.getText().toString());
             acc.setCard(et_Card.getText().toString());
+
+
             _myRef = mDatabase.getReference("Account");
-            _myRef.child(acc.getId()).setValue(acc.getTokenID());
+            DatabaseReference accountRef = _myRef.push();
+            //accountRef.setValue(idToken);
+
+            DatabaseReference _Ref1 = _myRef.child("Account_1");
+
+            //DatabaseReference _Ref1_Name = _Ref1.child("Name");
+            DatabaseReference _Ref1_Phone = _Ref1.child("Phone");
+            DatabaseReference _Ref1_Card = _Ref1.child("Identity Card");
+            DatabaseReference _Ref1_Address = _Ref1.child("Address");
+
+            _Ref1.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot zoneSnapshot: dataSnapshot.getChildren()) {
+                        Log.i(TAG, zoneSnapshot.child("Phone").getValue(String.class));
+                        Log.i(TAG, zoneSnapshot.child("Identity Card").getValue(String.class));
+                        Log.i(TAG, zoneSnapshot.child("Address").getValue(String.class));
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.w(TAG, "onCancelled", databaseError.toException());
+                }
+            });
+
+            //_myRef.child(acc.getId()).setValue(acc.getTokenID());
         }
 
 

@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.ParcelUuid;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -31,6 +32,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.util.CollectionUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -49,9 +51,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -276,17 +280,19 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSuccess(GetTokenResult result) {
                 String idToken = result.getToken();
-
+                getData();
                 DatabaseReference userRef = database.getReference("Account");
-
-//                getData();
-
+                DatabaseReference  userRef_1 = userRef.child(UUID.randomUUID().toString());
+               //getData();
+            if(!CollectionUtils.isEmpty(lstAccount))
                 for( Account acc: lstAccount){
                     if(acc.getTokenID().equals(idToken)){
                         updateUI(user);
                         return;
                     }
                 }
+
+
 //                list id = getdata();
 //                for(id in list):
 //                if id==idToken;
@@ -294,8 +300,11 @@ public class MainActivity extends AppCompatActivity {
 //                    return;
                 //String id = myRef.getKey();
 
-                DatabaseReference accountRef = userRef.push();
+                DatabaseReference accountRef = userRef_1.push();
                 accountRef.setValue(idToken);
+
+
+
 
 
                 //myRef.setValue(idToken);
