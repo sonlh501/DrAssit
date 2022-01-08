@@ -78,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getAllAccount();
         FacebookSdk.sdkInitialize(getApplicationContext());
         //AppEventsLogger.activateApp(MainActivity.this);
         init();
@@ -158,8 +159,32 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+    List<String> accounts = new ArrayList<>();
 
-    private void init(){
+    private List<String> getAllAccount() {
+
+        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference usersRef = rootRef.child("Account");
+        ValueEventListener valueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot ds : dataSnapshot.getChildren()) {
+                    String account =  ds.child("tokenId").getValue(String.class);
+                    accounts.add(account);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d(TAG, databaseError.getMessage()); //Don't ignore errors!
+            }
+        };
+        usersRef.addListenerForSingleValueEvent(valueEventListener);
+
+        return accounts;
+    }
+
+            private void init(){
         mCallbackManager = CallbackManager.Factory.create();
         btnGoogleLogin = findViewById(R.id.custom_google_signin_button);
         btnFacebookLogin = findViewById(R.id.custom_facebook_signin_button);
@@ -292,6 +317,13 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
 
+                if(!CollectionUtils.isEmpty(accounts))
+                    for( String id: accounts){
+                        if(id.equals(idToken)){
+                            updateUI(user);
+                            return;
+                        }
+                    }
 
 //                list id = getdata();
 //                for(id in list):
@@ -299,9 +331,9 @@ public class MainActivity extends AppCompatActivity {
 //                    updateUI();
 //                    return;
                 //String id = myRef.getKey();
-
-                DatabaseReference accountRef = userRef_1.push();
-                accountRef.setValue(idToken);
+                DatabaseReference  tokenId = userRef_1.child("tokenId");
+                tokenId.setValue(idToken);
+                tokenId.push();
 
 
 

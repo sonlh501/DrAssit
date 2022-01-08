@@ -78,7 +78,7 @@ public class NofiticationsFragment_EditProfile extends AppCompatActivity {
             DatabaseReference accountRef = _myRef.push();
             //accountRef.setValue(idToken);
 
-            DatabaseReference _Ref1 = _myRef.child("Account_1");
+            DatabaseReference _Ref1 = _myRef.child("");
 
             //DatabaseReference _Ref1_Name = _Ref1.child("Name");
             DatabaseReference _Ref1_Phone = _Ref1.child("Phone");
