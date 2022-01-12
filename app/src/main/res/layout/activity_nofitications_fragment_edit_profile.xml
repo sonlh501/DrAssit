@@ -48,6 +48,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1.8"
                 android:hint="+84"
+                android:text="1121212121"
                 android:id="@+id/et_phone"/>
         </LinearLayout>
 
@@ -67,6 +68,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1.8"
                 android:hint="Stress, City"
+                android:text="HCM"
                 android:id="@+id/et_address"/>
         </LinearLayout>
 
@@ -86,6 +88,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1.8"
                 android:hint="000000"
+                android:text="113"
                 android:id="@+id/et_card"/>
         </LinearLayout>
 

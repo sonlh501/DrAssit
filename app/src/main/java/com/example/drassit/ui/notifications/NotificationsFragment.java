@@ -21,7 +21,11 @@ import com.example.drassit.ui.model.Account;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Objects;
 
@@ -102,31 +106,49 @@ public class NotificationsFragment extends Fragment {
         btn_EditProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                LoginManager.getInstance().logOut();
-                mAuth.signOut();
                 Intent intent = new Intent(getActivity(), NofiticationsFragment_EditProfile.class);
                 startActivity(intent);
-
             }
         });
 
         return root;
     }
 
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
     }
+
     public void getData()
     {
-        Bundle bundle = this.getActivity().getIntent().getExtras();
-        if(bundle == null) return;
-        Account account = (Account) bundle.get("Account");
-        tv_phone.setText(account.getPhone());
-        tv_address.setText(account.getAddress());
-        tv_card.setText(account.getCard());
+//        Bundle bundle = this.getActivity().getIntent().getExtras();
+//        if(bundle == null) return;
+//        Account account = (Account) bundle.get("Account");
+
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference("Account/"+ Objects.requireNonNull(mAuth.getCurrentUser()).getUid());
+
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                try {
+                    Account account = dataSnapshot.getValue(Account.class);
+                    tv_phone.setText(account.getPhone());
+                    tv_address.setText(account.getAddress());
+                    tv_card.setText(account.getCard());
+                }
+    catch (Exception e){
+                    return;
+}
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+
 
     }
 

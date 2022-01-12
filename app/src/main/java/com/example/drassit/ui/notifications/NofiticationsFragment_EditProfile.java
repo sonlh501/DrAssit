@@ -13,6 +13,9 @@ import android.widget.EditText;
 import com.example.drassit.R;
 import com.example.drassit.ui.model.Account;
 import com.google.android.gms.auth.api.credentials.IdToken;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -39,6 +42,7 @@ public class NofiticationsFragment_EditProfile extends AppCompatActivity {
         btn_Ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setData(null);
                 finish();
             }
         });
@@ -48,22 +52,10 @@ public class NofiticationsFragment_EditProfile extends AppCompatActivity {
     public void init() {
         btn_Ok = findViewById(R.id.btn_ok);
         et_Phone = findViewById(R.id.et_phone);
-        et_Phone = findViewById(R.id.et_address);
-        et_Phone = findViewById(R.id.et_card);
+        et_Address = findViewById(R.id.et_address);
+        et_Card = findViewById(R.id.et_card);
     }
 
-
-//    public void getData() {
-//
-//        Bundle bundle = getIntent().getExtras();
-//        if (acc == null) {
-//            acc = new Account();
-//        }
-//        acc = (Account) bundle.get("Account");
-//        et_Phone.setText(acc.getPhone());
-//        et_Address.setText(acc.getAddress());
-//        et_Card.setText(acc.getCard());
-//    }
 
 
     public void setData(Account acc) {
@@ -78,21 +70,21 @@ public class NofiticationsFragment_EditProfile extends AppCompatActivity {
             DatabaseReference accountRef = _myRef.push();
             //accountRef.setValue(idToken);
 
-            DatabaseReference _Ref1 = _myRef.child("");
+            DatabaseReference _Ref1 = _myRef.child("3f263f11-2317-4052-ac47-eeb604018e36");
 
             //DatabaseReference _Ref1_Name = _Ref1.child("Name");
             DatabaseReference _Ref1_Phone = _Ref1.child("Phone");
             DatabaseReference _Ref1_Card = _Ref1.child("Identity Card");
             DatabaseReference _Ref1_Address = _Ref1.child("Address");
 
+            updateUser(acc);
+
+            Account accForInsertFirebase = acc;
             _Ref1.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for (DataSnapshot zoneSnapshot: dataSnapshot.getChildren()) {
-                        Log.i(TAG, zoneSnapshot.child("Phone").getValue(String.class));
-                        Log.i(TAG, zoneSnapshot.child("Identity Card").getValue(String.class));
-                        Log.i(TAG, zoneSnapshot.child("Address").getValue(String.class));
-
+                            _Ref1.setValue(accForInsertFirebase);
                     }
                 }
 
@@ -105,6 +97,17 @@ public class NofiticationsFragment_EditProfile extends AppCompatActivity {
             //_myRef.child(acc.getId()).setValue(acc.getTokenID());
         }
 
+
+    }
+
+    private void updateUser(Account acc) {
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        DatabaseReference accountRef = mDatabase.getReference("Account").child(user.getUid());
+
+        accountRef.setValue(acc);
+        accountRef.push();
 
     }
 }

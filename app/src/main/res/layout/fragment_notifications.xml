@@ -24,7 +24,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:padding="7dp">
+            android:padding="7dp"
+            android:background="#C58A33"
+            >
 
             <ImageView
                 android:id="@+id/ivPic"
@@ -52,7 +54,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Name"
-                    android:textColor="#B3A52C"
+                    android:textColor="#000000"
                     android:textStyle="italic"/>
 
             </LinearLayout>
@@ -64,20 +66,23 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="8dp">
+            android:padding="8dp"
+            android:layout_margin="10dp">
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Phone:"
+                android:textStyle="bold"
                 />
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                android:text=" "
+                android:text="000"
+                android:textColor="#EDFBFBFB"
                 android:id="@+id/tv_Phone"/>
         </LinearLayout>
 
@@ -85,19 +90,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="8dp">
+            android:padding="8dp"
+            android:layout_margin="10dp">
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Address: " />
+                android:text="Address: "
+                android:textStyle="bold"/>
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:text=" "
+                android:textColor="#EDFBFBFB"
                 android:id="@+id/tv_Address"/>
         </LinearLayout>
 
@@ -105,19 +113,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="8dp">
+            android:padding="8dp"
+            android:layout_margin="10dp">
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Identity Card:" />
+                android:text="Identity Card:"
+                android:textStyle="bold"/>
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:text=" "
+                android:textColor="#EDFBFBFB"
                 android:id="@+id/tv_Card"/>
         </LinearLayout>
 

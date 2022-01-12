@@ -3,10 +3,12 @@ package com.example.drassit;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.ParcelUuid;
 import android.util.Log;
@@ -55,6 +57,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 
@@ -78,7 +81,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        getAllAccount();
         FacebookSdk.sdkInitialize(getApplicationContext());
         //AppEventsLogger.activateApp(MainActivity.this);
         init();
@@ -135,16 +137,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        authStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if(user!= null){
-                    updateUI(user);
-                }
-                else{
-                    updateUI(null);
-                }
+        authStateListener = firebaseAuth -> {
+            FirebaseUser user1 = firebaseAuth.getCurrentUser();
+            if(user1 != null){
+                updateUI(user1);
+            }
+            else{
+                updateUI(null);
             }
         };
 
@@ -212,7 +211,8 @@ public class MainActivity extends AppCompatActivity {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 //Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
-                firebaseAuthWithGoogle(account.getIdToken());
+                //firebaseAuthWithGoogle(account.getIdToken());
+                firebaseGoogleAuth(account);
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
                 Log.w(TAG, "Google sign in failed", e);
@@ -220,7 +220,29 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-
+    private void firebaseGoogleAuth(GoogleSignInAccount acct) {
+        //check if the account is null
+        if (acct != null) {
+            AuthCredential authCredential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
+            mAuth.signInWithCredential(authCredential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(MainActivity.this, "Successful", Toast.LENGTH_SHORT).show();
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        createIdToken(user);
+                        updateUI(user);
+                    } else {
+                        Toast.makeText(MainActivity.this, "Failed", Toast.LENGTH_SHORT).show();
+                        updateUI(null);
+                    }
+                }
+            });
+        }
+        else{
+            Toast.makeText(MainActivity.this, "acc failed", Toast.LENGTH_SHORT).show();
+        }
+    }
     private void firebaseAuthWithGoogle(String idToken) {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
         mAuth.signInWithCredential(credential)
@@ -234,9 +256,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                             createIdToken(user);
-//                            Intent intent = new Intent(MainActivity.this,DriverAssitant.class);
-//                            startActivity(intent);
-//                            finish();
+
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -255,16 +275,15 @@ public class MainActivity extends AppCompatActivity {
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
+                        if (task.isSuccessful() && Objects.nonNull(mAuth.getCurrentUser())) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInFacebookWithCredential: Success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-
+                            FirebaseUser user = mAuth.getCurrentUser() ;
+                            assert user != null;
                             createIdToken(user);
-
-
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -285,41 +304,42 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-//    @Override
-//    protected void onStart() {
-//        super.onStart();
-//        mAuth.addAuthStateListener(authStateListener);
-//    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mAuth.addAuthStateListener(authStateListener);
+    }
 
-//    @Override
-//    protected void onStop() {
-//        super.onStop();
-//
-//        if(authStateListener!=null){
-//            mAuth.removeAuthStateListener(authStateListener);
-//        }
-//    }
+    @Override
+    protected void onStop() {
+        super.onStop();
 
-    private void createIdToken(FirebaseUser user){
+        if(authStateListener!=null){
+            mAuth.removeAuthStateListener(authStateListener);
+        }
+    }
+
+
+
+    public void createIdToken(FirebaseUser user){
         user.getIdToken(true).addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
             @Override
-            public void onSuccess(GetTokenResult result) {
-                String idToken = result.getToken();
-                getData();
+            public void onSuccess(@NonNull GetTokenResult result) {
+                String userId = user.getUid();
+
                 DatabaseReference userRef = database.getReference("Account");
-                DatabaseReference  userRef_1 = userRef.child(UUID.randomUUID().toString());
-               //getData();
+
             if(!CollectionUtils.isEmpty(lstAccount))
                 for( Account acc: lstAccount){
-                    if(acc.getTokenID().equals(idToken)){
+                    if(acc.getTokenID().equals(userId)){
                         updateUI(user);
                         return;
                     }
                 }
 
                 if(!CollectionUtils.isEmpty(accounts))
-                    for( String id: accounts){
-                        if(id.equals(idToken)){
+                    for(String id: accounts){
+                        if(id.equals(userId)){
                             updateUI(user);
                             return;
                         }
@@ -331,9 +351,26 @@ public class MainActivity extends AppCompatActivity {
 //                    updateUI();
 //                    return;
                 //String id = myRef.getKey();
-                DatabaseReference  tokenId = userRef_1.child("tokenId");
-                tokenId.setValue(idToken);
-                tokenId.push();
+
+                userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+
+
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                        if (!snapshot.hasChild(userId)) {
+                            DatabaseReference  userRef_1 = userRef.child(userId);
+
+                            userRef_1.setValue("null");
+                            userRef_1.push();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
 
 
 
@@ -341,33 +378,33 @@ public class MainActivity extends AppCompatActivity {
 
                 //myRef.setValue(idToken);
                 //Do whatever
-                Log.d(TAG, "GetTokenResult result = " + idToken);
+                Log.d(TAG, "GetTokenResult result = " + userId);
             }
         });
     }
 
-    public void getData() {
-        lstAccount = new ArrayList<>();
-        _myAccountRef = database.getReference("Account");
-
-        _myAccountRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot data: snapshot.getChildren()){
-
-                    Account acc= data.getValue(Account.class);
-                    lstAccount.add(acc);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-
-
-
-
-        });
-    }
+//    public void getData() {
+//        lstAccount = new ArrayList<>();
+//        _myAccountRef = database.getReference("Account");
+//
+//        _myAccountRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                for(DataSnapshot data: snapshot.getChildren()){
+//
+//                    Account acc= data.getValue(Account.class);
+//                    lstAccount.add(acc);
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//
+//
+//
+//
+//        });
+//    }
 }
